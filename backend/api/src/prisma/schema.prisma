@@ -1,0 +1,11 @@
+enum Role {
+  USER
+  ADMIN
+}
+
+model ServiceRequest {
+  id        String   @id @default(cuid())
+  title     String
+  date      DateTime
+  createdAt DateTime @default(now())
+}
