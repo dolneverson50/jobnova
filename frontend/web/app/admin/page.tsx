@@ -22,11 +22,6 @@ import { Badge } from '@/components/ui/badge';
 
 import { Button } from '@/components/ui/button';
 
-import {
-  CheckCircle,
-  XCircle,
-} from 'lucide-react';
-
 export default function AdminPage() {
   const [users, setUsers] = useState<any[]>([]);
   const [requests, setRequests] = useState<any[]>([]);
@@ -37,56 +32,76 @@ export default function AdminPage() {
   }, []);
 
   const fetchUsers = async () => {
-    const res = await fetch(
-      'http://localhost:4000/admin/users'
-    );
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/users`
+      );
 
-    const data = await res.json();
+      const data = await res.json();
 
-    setUsers(data);
+      setUsers(data);
+    } catch (error) {
+      console.error('Failed to fetch users', error);
+    }
   };
 
   const fetchRequests = async () => {
-    const res = await fetch(
-      'http://localhost:4000/admin/requests'
-    );
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/requests`
+      );
 
-    const data = await res.json();
+      const data = await res.json();
 
-    setRequests(data);
+      setRequests(data);
+    } catch (error) {
+      console.error('Failed to fetch requests', error);
+    }
   };
 
   const approveRequest = async (id: string) => {
-    await fetch(
-      `http://localhost:4000/admin/requests/${id}/approve`,
-      {
-        method: 'PATCH',
-      }
-    );
+    try {
+      await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/requests/${id}/approve`,
+        {
+          method: 'PATCH',
+        }
+      );
 
-    fetchRequests();
+      fetchRequests();
+    } catch (error) {
+      console.error('Approve failed', error);
+    }
   };
 
   const rejectRequest = async (id: string) => {
-    await fetch(
-      `http://localhost:4000/admin/requests/${id}/reject`,
-      {
-        method: 'PATCH',
-      }
-    );
+    try {
+      await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/requests/${id}/reject`,
+        {
+          method: 'PATCH',
+        }
+      );
 
-    fetchRequests();
+      fetchRequests();
+    } catch (error) {
+      console.error('Reject failed', error);
+    }
   };
 
   const verifyProvider = async (id: string) => {
-    await fetch(
-      `http://localhost:4000/admin/providers/${id}/verify`,
-      {
-        method: 'PATCH',
-      }
-    );
+    try {
+      await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/providers/${id}/verify`,
+        {
+          method: 'PATCH',
+        }
+      );
 
-    fetchUsers();
+      fetchUsers();
+    } catch (error) {
+      console.error('Verification failed', error);
+    }
   };
 
   return (
@@ -247,24 +262,24 @@ export default function AdminPage() {
                   </TableCell>
 
                   <TableCell className="space-x-2">
-  <button
-    onClick={() =>
-      approveRequest(request.id)
-    }
-    className="bg-green-500 text-white px-3 py-1 rounded"
-  >
-    Approve
-  </button>
+                    <button
+                      onClick={() =>
+                        approveRequest(request.id)
+                      }
+                      className="bg-green-500 text-white px-3 py-1 rounded"
+                    >
+                      Approve
+                    </button>
 
-  <button
-    onClick={() =>
-      rejectRequest(request.id)
-    }
-    className="bg-red-500 text-white px-3 py-1 rounded"
-  >
-    Reject
-  </button>
-</TableCell>
+                    <button
+                      onClick={() =>
+                        rejectRequest(request.id)
+                      }
+                      className="bg-red-500 text-white px-3 py-1 rounded"
+                    >
+                      Reject
+                    </button>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { api } from '@/lib/api';
 
 export default function DashboardPage() {
   const [category, setCategory] = useState('');
@@ -9,14 +8,31 @@ export default function DashboardPage() {
 
   const submitBooking = async () => {
     try {
-      await api.post('/bookings', {
-        category,
-        description,
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/bookings`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            category,
+            description,
+          }),
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error('Failed to create booking');
+      }
 
       alert('Booking created');
+
+      setCategory('');
+      setDescription('');
     } catch (error) {
       console.error(error);
+      alert('Something went wrong');
     }
   };
 
@@ -31,14 +47,18 @@ export default function DashboardPage() {
           className="mb-4 w-full border p-2"
           placeholder="Category"
           value={category}
-          onChange={(e) => setCategory(e.target.value)}
+          onChange={(e) =>
+            setCategory(e.target.value)
+          }
         />
 
         <textarea
           className="mb-4 w-full border p-2"
           placeholder="Description"
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={(e) =>
+            setDescription(e.target.value)
+          }
         />
 
         <button

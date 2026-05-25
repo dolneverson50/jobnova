@@ -25,19 +25,23 @@ enum BookingStatus {
 }
 
 model User {
-  id           String           @id @default(uuid())
+  id           String   @id @default(uuid())
 
-  email        String           @unique
+  email        String   @unique
+
   password     String
 
-  role         Role             @default(CLIENT)
+  role         Role     @default(CLIENT)
 
-  isVerified   Boolean          @default(false)
+  isVerified   Boolean  @default(false)
+
   kycDocument  String?
 
-  createdAt    DateTime         @default(now())
+  createdAt    DateTime @default(now())
 
   bookings     ServiceRequest[]
+
+  @@index([email])
 }
 
 model ServiceRequest {
