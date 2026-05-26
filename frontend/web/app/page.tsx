@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+export default function HomePage() {
 
 export default function DashboardPage() {
   const [title, setTitle] = useState('');
