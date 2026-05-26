@@ -1,32 +1,39 @@
 'use client';
 
-export default function HomePage() {
+import { useState } from 'react';
 
-export default function DashboardPage() {
+export default function HomePage() {
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
   const [message, setMessage] = useState('');
 
-  async function createBooking(e: React.FormEvent) {
+  async function createBooking(
+    e: React.FormEvent
+  ) {
     e.preventDefault();
 
-    const response = await fetch(
-      'http://localhost:4000/bookings',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          title,
-          date,
-        }),
-      }
-    );
+    try {
+      const response = await fetch(
+        'http://localhost:4000/bookings',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            title,
+            date,
+          }),
+        }
+      );
 
-    const data = await response.json();
+      const data = await response.json();
 
-    setMessage(JSON.stringify(data));
+      setMessage(JSON.stringify(data));
+    } catch (error) {
+      console.error(error);
+      setMessage('Failed to create booking');
+    }
   }
 
   return (
@@ -45,14 +52,18 @@ export default function DashboardPage() {
             placeholder="Booking Title"
             className="w-full rounded border p-3"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e) =>
+              setTitle(e.target.value)
+            }
           />
 
           <input
             type="date"
             className="w-full rounded border p-3"
             value={date}
-            onChange={(e) => setDate(e.target.value)}
+            onChange={(e) =>
+              setDate(e.target.value)
+            }
           />
 
           <button
