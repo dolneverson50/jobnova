@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 export default function HomePage() {
   const [title, setTitle] = useState('');
@@ -8,7 +8,7 @@ export default function HomePage() {
   const [message, setMessage] = useState('');
 
   async function createBooking(
-    e: React.FormEvent
+    e: React.FormEvent<HTMLFormElement>
   ) {
     e.preventDefault();
 
@@ -29,7 +29,7 @@ export default function HomePage() {
 
       const data = await response.json();
 
-      setMessage(JSON.stringify(data));
+      setMessage(JSON.stringify(data, null, 2));
     } catch (error) {
       console.error(error);
       setMessage('Failed to create booking');
@@ -75,7 +75,7 @@ export default function HomePage() {
         </form>
 
         {message && (
-          <pre className="mt-4 rounded bg-gray-100 p-3 text-sm">
+          <pre className="mt-4 rounded bg-gray-100 p-3 text-sm overflow-auto">
             {message}
           </pre>
         )}
