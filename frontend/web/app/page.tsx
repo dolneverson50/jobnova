@@ -14,7 +14,7 @@ export default function HomePage() {
 
     try {
       const response = await fetch(
-        'http://localhost:4000/bookings',
+        'https://jsonplaceholder.typicode.com/posts',
         {
           method: 'POST',
           headers: {
